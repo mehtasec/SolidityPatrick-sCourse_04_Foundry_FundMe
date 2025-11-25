@@ -3,28 +3,29 @@ pragma solidity ^0.8.30;
 
 import {Test, console} from "forge-std/Test.sol";
 import {FundMe} from "../src/FundMe.sol";
+import {DeployFundMe} from "../script/DeployFundMe.s.sol";
 
 contract FundMeTest is Test {
-
     FundMe fundMe;
+
     function setUp() external {
-        fundMe = new FundMe();
+        // fundMe = new FundMe(0x694AA1769357215DE4FAC081bf1f309aDC325306); // refactor
+        DeployFundMe deployFundMe = new DeployFundMe();
+        fundMe = deployFundMe.run();
     }
 
-    function testMinimumDollarIsFive() public view{
+    function testMinimumDollarIsFive() public view {
         assertEq(fundMe.MINIMUM_USD(), 5e18);
     }
 
-    function testOwnerIsMsgSender() public view{
+    function testOwnerIsMsgSender() public view {
         // assertEq(fundMe.i_owner(), msg.sender); // us calling -> FundMeTest -> this contract deploys new isntance of FundMe, se address is owner here.
-        assertEq(fundMe.i_owner(), address(this));
-        
-        
+        // assertEq(fundMe.i_owner(), address(this)); // again have to do msg.sender after refactoring
+        assertEq(fundMe.i_owner(), msg.sender );
     }
 
     function testPriceFeedVersionIsAccurate() public view {
         uint256 version = fundMe.getVersion(); // while calling getVersion, use sepolia rpc_url with chain-fork(--fork-url)
-        assertEq(version, 4); 
+        assertEq(version, 4);
     }
-    
 }

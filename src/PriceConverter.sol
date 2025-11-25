@@ -7,17 +7,17 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 // Why not an interface?
 library PriceConverter {
     // We could make this public, but then we'd have to deploy it
-    function getPrice() internal view returns (uint256) {
+    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) { // how does this takes argument? since we are not directly interacting with this fxn
         // Sepolia ETH / USD Address
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306);
+        // AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306); // refactoring
         (, int256 answer,,,) = priceFeed.latestRoundData();
         // ETH/USD rate in 18 digit
         return uint256(answer * 1e10);
     }
 
     // 1000000000
-    function getConversionRate(uint256 ethAmount) internal view returns (uint256) {
-        uint256 ethPrice = getPrice();
+    function getConversionRate(uint256 ethAmount, AggregatorV3Interface priceFeed) internal view returns (uint256) {
+        uint256 ethPrice = getPrice(priceFeed);
         uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
         // the actual ETH/USD conversion rate, after adjusting the extra 0s.
         return ethAmountInUsd;
