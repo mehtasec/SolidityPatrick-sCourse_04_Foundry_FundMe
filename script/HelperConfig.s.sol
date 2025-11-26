@@ -13,6 +13,10 @@ contract HelperConfig is Script {
 
     NetworkConfig public activeNetworkConfig;
 
+    // if we dont want to remember the parameters of MockV3Interface, make them constants
+    uint8 public constant DECIMALS = 8;
+    int256 public constant INITIAL_PRICE = 2000e8;
+
     struct NetworkConfig {
         // if we need a lot of diff stuff, so turn below config in its own type, so createa struct
         address priceFeed; // ETH/USD price feed address
@@ -36,7 +40,7 @@ contract HelperConfig is Script {
         // 2. return the mock address
 
         vm.startBroadcast();
-        MockV3Aggregator mockPriceFeed = new MockV3Aggregator(8, 2000e8); // we put argument bcoz constructor had these
+        MockV3Aggregator mockPriceFeed = new MockV3Aggregator(DECIMALS, INITIAL_PRICE); // we put argument bcoz constructor had these
         vm.stopBroadcast();
 
         NetworkConfig memory anvilConfig = NetworkConfig({priceFeed: address(mockPriceFeed)});
