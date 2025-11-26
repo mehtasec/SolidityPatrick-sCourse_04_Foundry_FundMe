@@ -21,7 +21,7 @@ contract FundMeTest is Test {
     function testOwnerIsMsgSender() public view {
         // assertEq(fundMe.i_owner(), msg.sender); // us calling -> FundMeTest -> this contract deploys new isntance of FundMe, se address is owner here.
         // assertEq(fundMe.i_owner(), address(this)); // again have to do msg.sender after refactoring
-        assertEq(fundMe.i_owner(), msg.sender );
+        assertEq(fundMe.i_owner(), msg.sender);
     }
 
     function testPriceFeedVersionIsAccurate() public view {

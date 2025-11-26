@@ -7,7 +7,8 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 // Why not an interface?
 library PriceConverter {
     // We could make this public, but then we'd have to deploy it
-    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) { // how does this takes argument? since we are not directly interacting with this fxn
+    function getPrice(AggregatorV3Interface priceFeed) internal view returns (uint256) {
+        // how does this takes argument? since we are not directly interacting with this fxn
         // Sepolia ETH / USD Address
         // AggregatorV3Interface priceFeed = AggregatorV3Interface(0x694AA1769357215DE4FAC081bf1f309aDC325306); // refactoring
         (, int256 answer,,,) = priceFeed.latestRoundData();
