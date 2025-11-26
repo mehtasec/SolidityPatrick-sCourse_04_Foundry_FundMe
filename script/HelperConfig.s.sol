@@ -26,7 +26,7 @@ contract HelperConfig is Script {
         if (block.chainid == 11155111) {
             activeNetworkConfig = getSepoliaEthConfig();
         } else {
-            activeNetworkConfig = getAnvilEthConfig();
+            activeNetworkConfig = getOrCreateAnvilEthConfig();
         }
     }
 
@@ -35,9 +35,12 @@ contract HelperConfig is Script {
         return sepoliaConfig;
     }
 
-    function getAnvilEthConfig() public returns (NetworkConfig memory) {
+    function getOrCreateAnvilEthConfig() public returns (NetworkConfig memory) {
         // 1. deploy the mock (dummy contract)
         // 2. return the mock address
+        if (activeNetworkConfig.priceFeed != address(0)) {
+            return activeNetworkConfig;
+        }
 
         vm.startBroadcast();
         MockV3Aggregator mockPriceFeed = new MockV3Aggregator(DECIMALS, INITIAL_PRICE); // we put argument bcoz constructor had these
